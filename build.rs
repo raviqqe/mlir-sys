@@ -14,7 +14,6 @@ fn main() {
 
 fn run() -> Result<(), Box<dyn Error>> {
     println!("cargo:rerun-if-changed=wrapper.h");
-
     println!("cargo:rustc-link-search={}", llvm_config("--libdir")?);
 
     for name in fs::read_dir(llvm_config("--libdir")?)?
@@ -28,13 +27,18 @@ fn run() -> Result<(), Box<dyn Error>> {
         .collect::<Result<Vec<_>, io::Error>>()?
         .into_iter()
         .flatten()
+        .filter(|name| name.contains("libMLIR") && name.ends_with(".a"))
+        .chain(
+            llvm_config("--libnames")?
+                .trim()
+                .split(' ')
+                .map(String::from),
+        )
     {
-        if (name.contains("libLLVM") || name.contains("libMLIR")) && name.ends_with(".a") {
-            println!(
-                "cargo:rustc-link-lib={}",
-                name.trim_start_matches("lib").trim_end_matches(".a")
-            );
-        }
+        println!(
+            "cargo:rustc-link-lib={}",
+            name.trim_start_matches("lib").trim_end_matches(".a")
+        );
     }
 
     for flag in llvm_config("--system-libs")?
