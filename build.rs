@@ -41,10 +41,7 @@ fn run() -> Result<(), Box<dyn Error>> {
         );
     }
 
-    for flag in llvm_config("--system-libs")?
-        .split(' ')
-        .filter(|flag| !flag.is_empty())
-    {
+    for flag in llvm_config("--system-libs")?.trim().split(' ') {
         println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
     }
 
