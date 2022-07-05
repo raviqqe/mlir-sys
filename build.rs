@@ -18,7 +18,7 @@ fn run() -> Result<(), Box<dyn Error>> {
     println!("cargo:rustc-link-search={}", llvm_config("--libdir")?);
 
     if let Some(name) = get_system_libcpp() {
-        println!("cargo:rustc-link-lib={}", name);
+        println!("cargo:rustc-link-lib=dylib={}", name);
     }
 
     for flag in llvm_config("--system-libs")?
