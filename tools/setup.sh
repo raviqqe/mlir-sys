@@ -4,6 +4,7 @@ set -e
 
 llvm_version=14
 
+brew update
 brew install llvm@$llvm_version
 
 if [ -n "$GITHUB_ENV" ]; then
