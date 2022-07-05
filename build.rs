@@ -18,23 +18,31 @@ fn run() -> Result<(), Box<dyn Error>> {
 
     for name in fs::read_dir(llvm_config("--libdir")?)?
         .map(|entry| {
-            Ok(entry?
-                .path()
-                .file_name()
-                .and_then(|name| name.to_str())
-                .map(String::from))
+            Ok(if let Some(name) = entry?.path().file_name() {
+                name.to_str().map(String::from)
+            } else {
+                None
+            })
         })
         .collect::<Result<Vec<_>, io::Error>>()?
         .into_iter()
         .flatten()
-        .filter(|name| name.contains("libMLIR") && name.ends_with(".a"))
-        .chain(
-            llvm_config("--libnames")?
-                .trim()
-                .split(' ')
-                .map(String::from),
-        )
     {
+        if name == "libMLIRSupport.a"
+            || name.starts_with("libMLIR")
+                && name.ends_with(".a")
+                && !["Main", "Support"]
+                    .iter()
+                    .any(|pattern| name.contains(pattern))
+        {
+            println!(
+                "cargo:rustc-link-lib=static={}",
+                name.trim_start_matches("lib").trim_end_matches(".a")
+            );
+        }
+    }
+
+    for name in llvm_config("--libnames")?.trim().split(' ') {
         println!(
             "cargo:rustc-link-lib={}",
             name.trim_start_matches("lib").trim_end_matches(".a")
