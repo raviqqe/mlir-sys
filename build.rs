@@ -22,7 +22,7 @@ fn run() -> Result<(), Box<dyn Error>> {
     }
 
     for flag in llvm_config("--system-libs")?
-        .split(" ")
+        .split(' ')
         .filter(|flag| !flag.is_empty())
     {
         println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
@@ -63,8 +63,6 @@ fn get_system_libcpp() -> Option<&'static str> {
     if cfg!(target_env = "msvc") {
         None
     } else if cfg!(target_os = "macos") {
-        Some("c++")
-    } else if cfg!(target_os = "freebsd") {
         Some("c++")
     } else {
         Some("stdc++")
