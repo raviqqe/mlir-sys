@@ -72,7 +72,7 @@ fn get_system_libcpp() -> Option<&'static str> {
 }
 
 fn llvm_config(argument: &str) -> Result<String, Box<dyn Error>> {
-    let call = format!("llvm-config {}", argument);
+    let call = format!("llvm-config --link-static {}", argument);
 
     Ok(str::from_utf8(
         &if cfg!(target_os = "windows") {
