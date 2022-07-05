@@ -11,7 +11,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
 
-fn llvmconfigshim(arg: &str) -> String {
+fn llvm_config_shim(arg: &str) -> String {
     let call = format!("llvm-config {}", arg);
     let tg = if cfg!(target_os = "windows") {
         Command::new("cmd")
@@ -44,7 +44,7 @@ fn get_system_libcpp() -> Option<&'static str> {
 }
 
 fn llvm_libs() -> Vec<String> {
-    let libdir = llvmconfigshim("--libdir");
+    let libdir = llvm_config_shim("--libdir");
     let paths = fs::read_dir(libdir).unwrap();
     let names = paths
         .filter_map(|entry| {
@@ -59,11 +59,10 @@ fn llvm_libs() -> Vec<String> {
 }
 
 fn main() {
-    // Build bindings to MLIR C API.
     println!("cargo:rerun-if-changed=wrapper.h");
     println!("cargo:rerun-if-changed=build.rs");
-    let includedir = llvmconfigshim("--includedir");
-    let libdir = llvmconfigshim("--libdir");
+    let includedir = llvm_config_shim("--includedir");
+    let libdir = llvm_config_shim("--libdir");
     println!("cargo:libdir={}", libdir);
     println!("cargo:rustc-link-search=all={}", libdir);
     println!(
