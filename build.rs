@@ -17,17 +17,6 @@ fn run() -> Result<(), Box<dyn Error>> {
 
     println!("cargo:rustc-link-search={}", llvm_config("--libdir")?);
 
-    if let Some(name) = get_system_libcpp() {
-        println!("cargo:rustc-link-lib=dylib={}", name);
-    }
-
-    for flag in llvm_config("--system-libs")?
-        .split(' ')
-        .filter(|flag| !flag.is_empty())
-    {
-        println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
-    }
-
     for name in fs::read_dir(llvm_config("--libdir")?)?
         .map(|entry| {
             Ok(entry?
@@ -46,6 +35,17 @@ fn run() -> Result<(), Box<dyn Error>> {
                 name.trim_start_matches("lib").trim_end_matches(".a")
             );
         }
+    }
+
+    for flag in llvm_config("--system-libs")?
+        .split(' ')
+        .filter(|flag| !flag.is_empty())
+    {
+        println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
+    }
+
+    if let Some(name) = get_system_libcpp() {
+        println!("cargo:rustc-link-lib=dylib={}", name);
     }
 
     bindgen::builder()
