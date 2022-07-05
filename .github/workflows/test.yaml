@@ -17,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: tools/setup.sh
-        if: contains(matrix.os, 'windows')
       - run: cargo test
   lint:
     runs-on: ubuntu-latest
