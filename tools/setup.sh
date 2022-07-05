@@ -2,4 +2,10 @@
 
 set -e
 
-brew install llvm@14
+llvm_version=14
+
+brew install llvm@$llvm_version
+
+if [ -n "$GITHUB_ENV" ]; then
+  echo PATH=$(brew --prefix)/opt/llvm@$llvm_version/bin:$PATH >>$GITHUB_ENV
+fi
