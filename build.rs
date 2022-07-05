@@ -28,6 +28,13 @@ fn run() -> Result<(), Box<dyn Error>> {
         println!("cargo:rustc-link-lib=dylib={}", name);
     }
 
+    for flag in llvm_config("--system-libs")?
+        .split(" ")
+        .filter(|flag| !flag.is_empty())
+    {
+        println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
+    }
+
     for name in fs::read_dir(llvm_config("--libdir")?)?
         .map(|entry| {
             Ok(entry?
