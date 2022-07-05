@@ -46,7 +46,7 @@ fn run() -> Result<(), Box<dyn Error>> {
     }
 
     if let Some(name) = get_system_libcpp() {
-        println!("cargo:rustc-link-lib=dylib={}", name);
+        println!("cargo:rustc-link-lib={}", name);
     }
 
     bindgen::builder()
