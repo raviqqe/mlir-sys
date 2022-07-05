@@ -70,10 +70,8 @@ fn main() {
         "cargo:rustc-link-lib=dylib={}",
         get_system_libcpp().unwrap()
     );
-    println!("cargo:rustc-link-lib=LLVM");
-    println!("cargo:rustc-link-lib=MLIR");
     for l in llvm_libs().iter() {
-        if l.contains("libMLIRCAPI") {
+        if (l.contains("libLLVM") || l.contains("libMLIR")) && l.ends_with(".a") {
             let len = l.len();
             println!("cargo:rustc-link-lib={}", l[3..(len - 2)].to_string());
         }
