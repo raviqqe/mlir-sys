@@ -5,6 +5,10 @@
 
 Rust bindings to [the MLIR C API](https://mlir.llvm.org/docs/CAPI/).
 
+## References
+
+- [The original repository](https://github.com/femtomc/mlir-sys)
+
 ## License
 
 [MIT](LICENSE)
