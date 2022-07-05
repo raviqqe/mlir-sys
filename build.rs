@@ -1,9 +1,3 @@
-/*
-
-   This file is part of mlir-sys. License is MIT.
-
-*/
-
 extern crate bindgen;
 
 use std::env;
@@ -20,9 +14,8 @@ fn main() {
 
 fn run() -> Result<(), Box<dyn Error>> {
     println!("cargo:rerun-if-changed=wrapper.h");
-    println!("cargo:rerun-if-changed=build.rs");
 
-    println!("cargo:rustc-link-search=all={}", llvm_config("--libdir")?);
+    println!("cargo:rustc-link-search={}", llvm_config("--libdir")?);
 
     if let Some(name) = get_system_libcpp() {
         println!("cargo:rustc-link-lib={}", name);
