@@ -18,7 +18,8 @@
 #include <mlir-c/Dialect/Tensor.h>
 #include <mlir-c/ExecutionEngine.h>
 #include <mlir-c/IntegerSet.h>
-#include <mlir-c/Interfaces.h>
+// TODO This should be fixed on LLVM >14.0.6.
+// #include <mlir-c/Interfaces.h>
 #include <mlir-c/IR.h>
 #include <mlir-c/Pass.h>
 #include <mlir-c/Registration.h>
