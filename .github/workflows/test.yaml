@@ -33,4 +33,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s 15 all
-      - run: cargo test
+      - run: PATH=/usr/lib/llvm-15/bin:$PATH cargo test
