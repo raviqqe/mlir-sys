@@ -32,6 +32,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-      - run: curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash /dev/stdin 15 all
+      - run: curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash 15 all
       - run: tools/setup.sh
       - run: cargo test
