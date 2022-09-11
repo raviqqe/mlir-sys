@@ -37,7 +37,7 @@ jobs:
       - run: sudo apt -y install libmlir-15-dev mlir-15-tools
       - run: PATH=/usr/lib/llvm-15/bin:$PATH cargo test
   lint_llvm_15:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - run: curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s 15 all
