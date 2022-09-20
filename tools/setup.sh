@@ -7,4 +7,4 @@ llvm_version=15
 brew update
 brew install llvm@$llvm_version
 
-echo PATH=$(brew --prefix)/opt/llvm@$llvm_version/bin:$PATH >>$GITHUB_ENV
+echo MLIR_SYS_150_PREFIX=$(brew --prefix)/opt/llvm@$llvm_version >>$GITHUB_ENV
