@@ -5,7 +5,6 @@ use std::error::Error;
 use std::fs;
 use std::io;
 use std::path::Path;
-use std::path::PathBuf;
 use std::process::Command;
 use std::str;
 
@@ -49,7 +48,16 @@ fn run() -> Result<(), Box<dyn Error>> {
     }
 
     for flag in llvm_config("--system-libs")?.trim().split(' ') {
-        println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
+        let name = flag.trim_start_matches("-l");
+
+        if name.starts_with("/") {
+            println!(
+                "cargo:rustc-link-search={}",
+                Path::new(name).parent().unwrap().display()
+            );
+        }
+
+        println!("cargo:rustc-link-lib={}", name);
     }
 
     if let Some(name) = get_system_libcpp() {
@@ -78,7 +86,8 @@ fn get_system_libcpp() -> Option<&'static str> {
 }
 
 fn llvm_config(argument: &str) -> Result<String, Box<dyn Error>> {
-    let prefix = PathBuf::from(env::var("MLIR_SYS_150_PREFIX")?);
+    let prefix = env::var("MLIR_SYS_150_PREFIX")?;
+    let prefix = Path::new(&prefix);
     let call = format!(
         "{} --link-static {}",
         Path::join(&prefix, "bin/llvm-config").display(),
