@@ -48,16 +48,7 @@ fn run() -> Result<(), Box<dyn Error>> {
     }
 
     for flag in llvm_config("--system-libs")?.trim().split(' ') {
-        let name = flag.trim_start_matches("-l");
-
-        if name.starts_with("/") {
-            println!(
-                "cargo:rustc-link-search={}",
-                Path::new(name).parent().unwrap().display()
-            );
-        }
-
-        println!("cargo:rustc-link-lib={}", name);
+        println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
     }
 
     if let Some(name) = get_system_libcpp() {
@@ -90,7 +81,7 @@ fn llvm_config(argument: &str) -> Result<String, Box<dyn Error>> {
     let prefix = Path::new(&prefix);
     let call = format!(
         "{} --link-static {}",
-        Path::join(&prefix, "bin/llvm-config").display(),
+        Path::join(prefix, "bin/llvm-config").display(),
         argument
     );
 
