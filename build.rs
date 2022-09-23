@@ -76,10 +76,13 @@ fn run() -> Result<(), Box<dyn Error>> {
             );
             println!(
                 "cargo:rustc-link-lib={}",
-                path.file_stem()
+                path.file_name()
                     .unwrap()
                     .to_str()
                     .unwrap()
+                    .split_once('.')
+                    .unwrap()
+                    .0
                     .trim_start_matches("lib")
             );
         } else {
