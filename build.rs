@@ -44,7 +44,11 @@ fn run() -> Result<(), Box<dyn Error>> {
         .into_iter()
         .flatten()
     {
-        if name.starts_with("libMLIR") && name.ends_with(".a") && !name.contains("Main") {
+        if name.starts_with("libMLIR")
+            && name.ends_with(".a")
+            && !name.contains("Main")
+            && name != "libMLIRSupportIndentedOstream.a"
+        {
             if let Some(name) = trim_library_name(&name) {
                 println!("cargo:rustc-link-lib=static={}", name);
             }
