@@ -47,9 +47,7 @@ fn run() -> Result<(), Box<dyn Error>> {
         if name == "libMLIRSupport.a"
             || name.starts_with("libMLIR")
                 && name.ends_with(".a")
-                && !["Main", "Support"]
-                    .iter()
-                    .any(|pattern| name.contains(pattern))
+                && !["Main"].iter().any(|pattern| name.contains(pattern))
         {
             if let Some(name) = trim_library_name(&name) {
                 println!("cargo:rustc-link-lib=static={}", name);
