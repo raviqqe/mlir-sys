@@ -64,7 +64,26 @@ fn run() -> Result<(), Box<dyn Error>> {
     }
 
     for flag in llvm_config("--system-libs")?.trim().split(' ') {
-        println!("cargo:rustc-link-lib={}", flag.trim_start_matches("-l"));
+        let flag = flag.trim_start_matches("-l");
+
+        if flag.starts_with("/") {
+            let path = Path::new(flag);
+
+            println!(
+                "cargo:rustc-link-search={}",
+                path.parent().unwrap().display()
+            );
+            println!(
+                "cargo:rustc-link-lib={}",
+                path.file_stem()
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .trim_start_matches("lib")
+            );
+        } else {
+            println!("cargo:rustc-link-lib={}", flag);
+        }
     }
 
     if let Some(name) = get_system_libcpp() {
