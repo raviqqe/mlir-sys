@@ -66,7 +66,7 @@ fn run() -> Result<(), Box<dyn Error>> {
     for flag in llvm_config("--system-libs")?.trim().split(' ') {
         let flag = flag.trim_start_matches("-l");
 
-        if flag.starts_with("/") {
+        if flag.starts_with('/') {
             // llvm-config returns absolute paths for dynamically linked libraries.
             let path = Path::new(flag);
 
